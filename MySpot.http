@@ -1,0 +1,96 @@
+@url = http://localhost:5000
+@reservationId = 00000000-0000-0000-0000-000000000001
+@parkingSpotId = 00000000-0000-0000-0000-000000000001
+@userId = 00000000-0000-0000-0000-000000000001
+
+
+###
+GET {{url}}/users
+
+###
+GET {{url}}/users/{{userId}}
+
+###
+POST {{url}}/users
+Content-Type: application/json
+
+{
+    "email": "user1@myspot.io",
+    "username": "user1",
+    "password": "secret",
+    "fullName": "John Doe",
+    "role": "user"
+}
+
+###
+# @name sign_in
+POST {{url}}/users/sign-in
+Content-Type: application/json
+
+{
+    "email": "user1@myspot.io",
+    "password": "secret"
+}
+
+###
+@accessToken = {{sign_in.response.body.$.accessToken}}
+
+###
+GET {{url}}/users/me
+Authorization: Bearer {{accessToken}}
+
+###
+GET {{url}}/parking-spots
+
+###
+POST {{url}}/parking-spots/{{parkingSpotId}}/reservations/vehicle
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "parkingSpotId": "{{parkingSpotId}}",
+    "date": "2022-04-26",
+    "licencePlate": "XYZ123"
+}
+
+###
+POST {{url}}/parking-spots/reservations/cleaning
+Content-Type: application/json
+
+{
+    "date": "2022-04-26"
+}
+
+
+###
+PUT {{url}}/parking-spots/reservations/{{reservationId}}
+Content-Type: application/json
+
+{
+    "licencePlate": "XYZ1234"
+}
+
+
+###
+DELETE {{url}}/parking-spots/reservations/{{reservationId}}
+
+###
+GET {{url}}/api/users/me
+Authorization: Bearer {{accessToken}}
+
+###
+GET {{url}}/api/users/{{userId}}
+Authorization: Bearer {{accessToken}}
+
+###
+###
+POST {{url}}/api/users
+Content-Type: application/json
+
+{
+    "email": "user1@myspot.io",
+    "username": "user1",
+    "password": "secret",
+    "fullName": "John Doe",
+    "role": "user"
+}
